@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyBlDH9d9MXznwalYdZBU41hfi95TePiJmQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>98766095055</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.contactsApp.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>contacts-app-30598</string>
+	<key>STORAGE_BUCKET</key>
+	<string>contacts-app-30598.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:98766095055:ios:be17411a9465c91e25adba</string>
+</dict>
+</plist>
