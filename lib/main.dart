@@ -1,5 +1,5 @@
+import 'package:contacts_app/landing.dart';
 import 'package:contacts_app/views/add_contact_page.dart';
-import 'package:contacts_app/Groups/create_group.dart';
 import 'package:contacts_app/authentication/forgetPwScreen.dart';
 import 'package:contacts_app/Groups/group.dart';
 import 'package:contacts_app/views/home.dart';
@@ -35,15 +35,14 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routes: {
-        "/": (context) => CheckUser(),
-        "/home": (context) => Homepage(),
-        "/signup": (context) => SignUpPage(),
-        "/login": (context) => LoginPage(),
-        "/add": (context) => AddContact(),
-        "/forget": (context) => ForgetPw(),
-        '/group': (context) => Groups(),
-        '/create_group': (context) => CreateGroupPage(),
-
+        "/": (context) => const CheckUser(),
+        "/home": (context) => const Homepage(),
+        "/signup": (context) => const SignUpPage(),
+        "/login": (context) => const LoginPage(),
+        "/add": (context) => const AddContact(),
+        "/forget": (context) => const ForgetPw(),
+        '/group': (context) => const Group(),
+        '/target': (context) => const Target(),
       },
     );
   }
@@ -61,7 +60,7 @@ class _CheckUserState extends State<CheckUser> {
   void initState() {
     AuthService().isLoggedIn().then((value) {
       if (value) {
-        Navigator.pushReplacementNamed(context, "/home");
+        Navigator.pushReplacementNamed(context, "/target");
       } else {
         Navigator.pushReplacementNamed(context, "/login");
       }

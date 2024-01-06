@@ -11,8 +11,8 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final formKey = GlobalKey<FormState>();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +21,7 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Form(
             key: formKey,
             child: Column(children: [
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Text(
@@ -29,7 +29,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 style:
                     GoogleFonts.sora(fontSize: 40, fontWeight: FontWeight.w700),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               SizedBox(
@@ -38,12 +38,12 @@ class _SignUpPageState extends State<SignUpPage> {
                     validator: (value) =>
                         value!.isEmpty ? "Email cannot be empty." : null,
                     controller: _emailController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       label: Text("Email"),
                     ),
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               SizedBox(
@@ -54,12 +54,12 @@ class _SignUpPageState extends State<SignUpPage> {
                         : null,
                     controller: _passwordController,
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       label: Text("Password"),
                     ),
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               SizedBox(
@@ -74,13 +74,13 @@ class _SignUpPageState extends State<SignUpPage> {
                               .then((value) {
                             if (value == "Account Created") {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("Account Created")));
+                                  const SnackBar(content: Text("Account Created")));
                               Navigator.pushReplacementNamed(context, "/home");
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(
                                   value,
-                                  style: TextStyle(color: Colors.white),
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                                 backgroundColor: Colors.red.shade400,
                               ));
@@ -88,25 +88,25 @@ class _SignUpPageState extends State<SignUpPage> {
                           });
                         }
                       },
-                      child: Text(
+                      child: const Text(
                         "Sign Up",
                         style: TextStyle(fontSize: 16),
                       ))),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Already have and account?"),
+                  const Text("Already have and account?"),
                   TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text("Login"))
+                      child: const Text("Login"))
                 ],
               )
             ]),

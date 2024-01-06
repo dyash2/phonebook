@@ -9,21 +9,21 @@ class AddContact extends StatefulWidget {
 }
 
 class _AddContactState extends State<AddContact> {
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Add Contact")),
+      appBar: AppBar(title: const Text("Add Contact")),
       body: SingleChildScrollView(
         child: Form(
           key: formKey,
           child: Center(
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 SizedBox(
@@ -32,36 +32,39 @@ class _AddContactState extends State<AddContact> {
                       validator: (value) =>
                           value!.isEmpty ? "Enter any name" : null,
                       controller: _nameController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         label: Text("Name"),
                       ),
                     )),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 SizedBox(
                     width: MediaQuery.of(context).size.width * .9,
                     child: TextFormField(
+                      validator: (value) => value!.length < 10
+                        ? "Number should have atleast 10 characters."
+                        : null,
                       controller: _phoneController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         label: Text("Phone"),
                       ),
                     )),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 SizedBox(
                     width: MediaQuery.of(context).size.width * .9,
                     child: TextFormField(
                       controller: _emailController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         label: Text("Email"),
                       ),
                     )),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 SizedBox(
@@ -75,7 +78,7 @@ class _AddContactState extends State<AddContact> {
                             Navigator.pop(context);
                           }
                         },
-                        child: Text(
+                        child: const Text(
                           "Create",
                           style: TextStyle(fontSize: 16),
                         ))),

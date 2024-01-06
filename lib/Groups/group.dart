@@ -1,21 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:contacts_app/Groups/add_members_to_group.dart';
+import 'package:contacts_app/Groups/group_detail.dart';
 import 'package:contacts_app/controllers/crud_services.dart';
 import 'package:contacts_app/views/update_contact.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Groups extends StatefulWidget {
-  const Groups({Key? key}) : super(key: key);
+class Group extends StatefulWidget {
+  const Group({super.key});
 
   @override
-  State<Groups> createState() => _GroupsState();
+  State<Group> createState() => _GrouppageState();
 }
 
-class _GroupsState extends State<Groups> {
+class _GrouppageState extends State<Group> {
   late Stream<QuerySnapshot> _stream;
-  TextEditingController _searchController = TextEditingController();
-  FocusNode _searchfocusNode = FocusNode();
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchfocusNode = FocusNode();
+  TextEditingController _groupNameController = TextEditingController();
+
+  Map<String, bool> selectedContacts = {};
 
   @override
   void initState() {
@@ -43,87 +46,68 @@ class _GroupsState extends State<Groups> {
   searchContacts(String search) {
     _stream = CRUDService().getContacts(searchQuery: search);
   }
+  // Function to handle contact selection
+  void toggleContactSelection(String docId) {
+    setState(() {
+      selectedContacts[docId] = !(selectedContacts[docId] ?? false);
+    });
+  }
 
-  // Helper method to show a delete confirmation dialog
-  void showDeleteConfirmationDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Delete Group"),
-          content: Text("Are you sure you want to delete this group?"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: () {
-                // Implement logic to delete the group
-                // ...
-                Navigator.pop(context);
-              },
-              child: Text("Delete"),
+  void _showCreateGroupDialog() async {
+  String? groupName = await showDialog<String>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Create Group'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _groupNameController,
+              decoration: const InputDecoration(labelText: 'Group Name'),
             ),
           ],
-        );
-      },
-    );
-  }
+        ),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              String groupName = _groupNameController.text;
+              Navigator.of(context).pop(groupName); // Pass the group name to the caller
+            },
+            child: const Text('Create'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the AlertDialog
+            },
+            child: const Text('Cancel'),
+          ),
+        ],
+      );
+    },
+  );
 
-  // Helper method to navigate to the screen for adding members
- void navigateToAddMembersScreen() async {
-    final result = await Navigator.push(
+  // Check if the user pressed "Create" and groupName is not null
+  if (groupName != null && groupName.isNotEmpty) {
+    // Navigate to the new screen and pass the group name
+    Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AddMembersToGroupPage()),
+      MaterialPageRoute(
+        builder: (context) => GroupDetailScreen(groupName: groupName),
+      ),
     );
-    // Process the result if needed
   }
-
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Groups"),
-        actions: [
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              // Handle menu item selection
-              if (value == 'delete') {
-                showDeleteConfirmationDialog();
-              } else if (value == 'addMembers') {
-                navigateToAddMembersScreen();
-              }
-            },
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              PopupMenuItem<String>(
-                value: 'delete',
-                child: Row(
-                  children: [
-                    Icon(Icons.delete),
-                    SizedBox(width: 8),
-                    Text('Delete Group'),
-                  ],
-                ),
-              ),
-              PopupMenuItem<String>(
-                value: 'addMembers',
-                child: Row(
-                  children: [
-                    Icon(Icons.person_add),
-                    SizedBox(width: 8),
-                    Text('Add Members'),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
+        title: Center(child: const Text("Groups")),
+        automaticallyImplyLeading: false,
         bottom: PreferredSize(
+          preferredSize: Size(MediaQuery.of(context).size.width * 8, 80),
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: 8),
             child: SizedBox(
               width: MediaQuery.of(context).size.width * .9,
               child: TextFormField(
@@ -134,9 +118,9 @@ class _GroupsState extends State<Groups> {
                 focusNode: _searchfocusNode,
                 controller: _searchController,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  label: Text("Search"),
-                  prefixIcon: Icon(Icons.search),
+                  border: const OutlineInputBorder(),
+                  label: const Text("Search"),
+                  prefixIcon: const Icon(Icons.search),
                   suffixIcon: _searchController.text.isNotEmpty
                       ? IconButton(
                           onPressed: () {
@@ -145,61 +129,86 @@ class _GroupsState extends State<Groups> {
                             _stream = CRUDService().getContacts();
                             setState(() {});
                           },
-                          icon: Icon(Icons.close),
+                          icon: const Icon(Icons.close),
                         )
                       : null,
                 ),
               ),
             ),
           ),
-          preferredSize: Size(MediaQuery.of(context).size.width * 8, 80),
         ),
       ),
-      // body: StreamBuilder<QuerySnapshot>(
-      //   stream: _stream,
-      //   builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-      //     if (snapshot.hasError) {
-      //       return Text("Something Went Wrong");
-      //     }
-      //     if (snapshot.connectionState == ConnectionState.waiting) {
-      //       return Center(
-      //         child: Text("Loading"),
-      //       );
-      //     }
-      //     return snapshot.data!.docs.length == 0
-      //         ? Center(
-      //             child: Text("No Contacts Found ..."),
-      //           )
-      //         : ListView(
-      //             children: snapshot.data!.docs
-      //                 .map((DocumentSnapshot document) {
-      //                   Map<String, dynamic> data =
-      //                       document.data()! as Map<String, dynamic>;
-      //                   return ListTile(
-      //                     onTap: () => Navigator.push(
-      //                         context,
-      //                         MaterialPageRoute(
-      //                             builder: (context) => UpdateContact(
-      //                                 name: data["name"],
-      //                                 phone: data["phone"],
-      //                                 email: data["email"],
-      //                                 docID: document.id))),
-      //                     leading: CircleAvatar(child: Text(data["name"][0])),
-      //                     title: Text(data["name"]),
-      //                     subtitle: Text(data["phone"]),
-      //                     trailing: IconButton(
-      //                       icon: Icon(Icons.call),
-      //                       onPressed: () {
-      //                         callUser(data["phone"]);
-      //                       },
-      //                     ),
-      //                   );
-      //                 })
-      //                 .toList()
-      //                 .cast(),
-      //           );
-      //   },
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showCreateGroupDialog();
+        },
+        child: const Icon(Icons.person_add),
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _stream,
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return const Text("Something Went Wrong");
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: Text("Loading"),
+            );
+          }
+          return snapshot.data!.docs.isEmpty
+              ? const Center(
+                  child: Text("No Contacts Found ..."),
+                )
+              : ListView(
+                  children: snapshot.data!.docs
+                      .map((DocumentSnapshot document) {
+                        Map<String, dynamic> data =
+                            document.data()! as Map<String, dynamic>;
+                        String docId = document.id;
+
+                        return LongPressDraggable(
+                          data: docId,
+                          feedback: ListTile(
+                            title: Text(data["name"]),
+                          ),
+                          childWhenDragging: Container(),
+                          onDragStarted: () {
+                            // Start the drag operation
+                            toggleContactSelection(docId);
+                          },
+                          onDragEnd: (details) {
+                            // End the drag operation
+                            toggleContactSelection(docId);
+                          },
+                          child: ListTile(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UpdateContact(
+                                  name: data["name"],
+                                  phone: data["phone"],
+                                  email: data["email"],
+                                  docID: docId,
+                                ),
+                              ),
+                            ),
+                            leading: CircleAvatar(child: Text(data["name"][0])),
+                            title: Text(data["name"]),
+                            subtitle: Text(data["phone"]),
+                            trailing: Checkbox(
+                              value: selectedContacts[docId] ?? false,
+                              onChanged: (value) {
+                                toggleContactSelection(docId);
+                              },
+                            ),
+                          ),
+                        );
+                      })
+                      .toList()
+                      .cast(),
+                );
+        },
+      ),
     );
   }
 }

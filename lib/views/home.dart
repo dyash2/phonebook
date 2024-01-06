@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:contacts_app/controllers/auth_services.dart';
 import 'package:contacts_app/controllers/crud_services.dart';
-import 'package:contacts_app/Groups/create_group.dart';
-import 'package:contacts_app/Groups/group.dart';
 import 'package:contacts_app/views/update_contact.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +15,8 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   late Stream<QuerySnapshot> _stream;
-  TextEditingController _searchController = TextEditingController();
-  FocusNode _searchfocusNode = FocusNode();
-  List<String> _groups = [];
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchfocusNode = FocusNode();
 
   @override
   void initState() {
@@ -53,11 +50,12 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Contacts"),
+        title: const Text("Contacts"),
         // search box
         bottom: PreferredSize(
+            preferredSize: Size(MediaQuery.of(context).size.width * 8, 80),
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 8),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: SizedBox(
                   width: MediaQuery.of(context).size.width * .9,
                   child: TextFormField(
@@ -68,9 +66,9 @@ class _HomepageState extends State<Homepage> {
                     focusNode: _searchfocusNode,
                     controller: _searchController,
                     decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        label: Text("Search"),
-                        prefixIcon: Icon(Icons.search),
+                        border: const OutlineInputBorder(),
+                        label: const Text("Search"),
+                        prefixIcon:const Icon(Icons.search),
                         suffixIcon: _searchController.text.isNotEmpty
                             ? IconButton(
                                 onPressed: () {
@@ -79,18 +77,17 @@ class _HomepageState extends State<Homepage> {
                                   _stream = CRUDService().getContacts();
                                   setState(() {});
                                 },
-                                icon: Icon(Icons.close),
+                                icon:const Icon(Icons.close),
                               )
                             : null),
                   )),
-            ),
-            preferredSize: Size(MediaQuery.of(context).size.width * 8, 80)),
+            )),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, "/add");
         },
-        child: Icon(Icons.person_add),
+        child: const Icon(Icons.person_add),
       ),
       drawer: Drawer(
           child: ListView(
@@ -112,72 +109,15 @@ class _HomepageState extends State<Homepage> {
               Text(FirebaseAuth.instance.currentUser!.email.toString())
             ],
           )),
-          ExpansionTile(
-            leading: const Icon(Icons.group),
-            title: const Text("Groups"),
-            children: [
-              ListTile(
-                onTap: () {
-                  Navigator.pop(context); // Close the drawer
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Groups()));
-                },
-                title: const Text("View Groups"),
-              ),
-              ..._groups.map((groupName) {
-                return ListTile(
-                  title: Text(groupName),
-                  // Add any other properties or actions related to each group
-                );
-              }).toList(),
-            ],
-          ),
-          ListTile(
-  onTap: () async {
-    String? groupName;  // Declare the variable with a nullable type
-
-    // Open a dialog or navigate to a new page to get the group name
-    groupName = await showDialog<String>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Create Group"),
-          content: TextField(
-            onChanged: (value) => groupName = value,
-            decoration: InputDecoration(labelText: "Group Name"),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, groupName),
-              child: Text("Create"),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (groupName != null && groupName!.isNotEmpty) {
-      setState(() {
-        _groups.add(groupName!);
-      });
-    }
-  },
-  title: const Text("+ Create Group"),
-),
-
           ListTile(
             onTap: () {
               AuthService().logout();
               ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text("Logged Out")));
+                  .showSnackBar(const SnackBar(content: Text("Logged Out")));
               Navigator.pushReplacementNamed(context, "/login");
             },
-            leading: Icon(Icons.logout_outlined),
-            title: Text("Logout"),
+            leading: const Icon(Icons.logout_outlined),
+            title: const Text("Logout"),
           )
         ],
       )),
@@ -186,15 +126,15 @@ class _HomepageState extends State<Homepage> {
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
-              return Text("Something Went Wrong");
+              return const Text("Something Went Wrong");
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: Text("Loading"),
               );
             }
-            return snapshot.data!.docs.length == 0
-                ? Center(
+            return snapshot.data!.docs.isEmpty
+                ? const Center(
                     child: Text("No Contacts Found ..."),
                   )
                 : ListView(
@@ -215,7 +155,7 @@ class _HomepageState extends State<Homepage> {
                             title: Text(data["name"]),
                             subtitle: Text(data["phone"]),
                             trailing: IconButton(
-                              icon: Icon(Icons.call),
+                              icon: const Icon(Icons.call),
                               onPressed: () {
                                 callUser(data["phone"]);
                               },

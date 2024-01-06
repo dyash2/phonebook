@@ -42,6 +42,7 @@ dependencies:
   cloud_firestore: ^4.9.1
   url_launcher: ^6.1.14
   email_auth: ^1.1.1
+  flutter_svg: ^2.0.9
 
 dev_dependencies:
   flutter_test:

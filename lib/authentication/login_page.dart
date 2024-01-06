@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Form(
             key: formKey,
             child: Column(children: [
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Text(
@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
                 style:
                     GoogleFonts.sora(fontSize: 40, fontWeight: FontWeight.w700),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               SizedBox(
@@ -38,12 +38,12 @@ class _LoginPageState extends State<LoginPage> {
                     validator: (value) =>
                         value!.isEmpty ? "Email cannot be empty." : null,
                     controller: _emailController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       label: Text("Email"),
                     ),
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               SizedBox(
@@ -54,21 +54,21 @@ class _LoginPageState extends State<LoginPage> {
                         : null,
                     controller: _passwordController,
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       label: Text("Password"),
                     ),
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, "/forget");
                 },
-                child: Text("Forget Password"),
+                child: const Text("Forget Password"),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               SizedBox(
@@ -83,13 +83,13 @@ class _LoginPageState extends State<LoginPage> {
                               .then((value) {
                             if (value == "Login Successful") {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("Login Successful")));
-                              Navigator.pushReplacementNamed(context, "/home");
+                                  const SnackBar(content: Text("Login Successful")));
+                              Navigator.pushReplacementNamed(context, "/target");
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(
                                   value,
-                                  style: TextStyle(color: Colors.white),
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                                 backgroundColor: Colors.red.shade400,
                               ));
@@ -97,22 +97,22 @@ class _LoginPageState extends State<LoginPage> {
                           });
                         }
                       },
-                      child: Text(
+                      child: const Text(
                         "Login",
                         style: TextStyle(fontSize: 16),
                       ))),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Don't have an account?"),
+                  const Text("Don't have an account?"),
                   TextButton(
                       onPressed: () {
                         Navigator.pushNamed(context, "/signup");
                       },
-                      child: Text("Sign Up"))
+                      child: const Text("Sign Up"))
                 ],
               ),
             ]),

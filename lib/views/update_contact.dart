@@ -15,9 +15,9 @@ class UpdateContact extends StatefulWidget {
 }
 
 class _UpdateContactState extends State<UpdateContact> {
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -32,14 +32,14 @@ class _UpdateContactState extends State<UpdateContact> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Update Contact")),
+      appBar: AppBar(title: const Text("Update Contact")),
       body: SingleChildScrollView(
         child: Form(
           key: formKey,
           child: Center(
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 SizedBox(
@@ -48,36 +48,36 @@ class _UpdateContactState extends State<UpdateContact> {
                       validator: (value) =>
                           value!.isEmpty ? "Enter any name" : null,
                       controller: _nameController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         label: Text("Name"),
                       ),
                     )),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 SizedBox(
                     width: MediaQuery.of(context).size.width * .9,
                     child: TextFormField(
                       controller: _phoneController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         label: Text("Phone"),
                       ),
                     )),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 SizedBox(
                     width: MediaQuery.of(context).size.width * .9,
                     child: TextFormField(
                       controller: _emailController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         label: Text("Email"),
                       ),
                     )),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 SizedBox(
@@ -94,11 +94,11 @@ class _UpdateContactState extends State<UpdateContact> {
                             Navigator.pop(context);
                           }
                         },
-                        child: Text(
+                        child: const Text(
                           "Update",
                           style: TextStyle(fontSize: 16),
                         ))),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 SizedBox(
@@ -109,7 +109,7 @@ class _UpdateContactState extends State<UpdateContact> {
                           CRUDService().deleteContact(widget.docID);
                           Navigator.pop(context);
                         },
-                        child: Text(
+                        child: const Text(
                           "Delete",
                           style: TextStyle(fontSize: 16),
                         ))),

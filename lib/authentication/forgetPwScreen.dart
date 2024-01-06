@@ -32,7 +32,7 @@ class _ForgetPwState extends State<ForgetPw> {
             key: formKey,
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 Text(
@@ -42,7 +42,7 @@ class _ForgetPwState extends State<ForgetPw> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 SizedBox(
@@ -51,13 +51,13 @@ class _ForgetPwState extends State<ForgetPw> {
                     validator: (value) =>
                         value!.isEmpty ? "Email cannot be empty." : null,
                     controller: _emailController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       label: Text("Email"),
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 SizedBox(
@@ -67,7 +67,7 @@ class _ForgetPwState extends State<ForgetPw> {
                     onPressed: () {
                       sendPasswordResetEmail(context);
                     },
-                    child: Text(
+                    child: const Text(
                         "Send",
                         style: TextStyle(fontSize: 16),
                       ),
